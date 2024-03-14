@@ -1,5 +1,6 @@
 <template>
-  <nav>
+  <h1 class="centered">Citadels</h1>
+  <nav class="centered">
     <router-link to="/">Home</router-link> |
     <router-link to="/room">Room</router-link> |
     <router-link to="/game">Game</router-link>
@@ -12,8 +13,7 @@
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+  //text-align: center;
 }
 
 nav {
@@ -27,6 +27,10 @@ nav a {
 
 nav a.router-link-exact-active {
   color: #42b983;
+}
+.centered {
+  margin: auto;
+  text-align: center;
 }
 </style>
 <script setup>

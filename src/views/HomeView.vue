@@ -1,9 +1,8 @@
 <template>
-  <h1>Citadels</h1>
-  <input type="text" placeholder="Your name">
-  <button>Create session</button>
-  <input type="text" placeholder="Room code">
-  <button>Join session</button>
+  <div><input type="text" placeholder="Your name"></div>
+  <div><button>Create session</button></div>
+  <div><input type="text" placeholder="Room code"></div>
+  <div><button>Join session</button></div>
 </template>
 
 <script>

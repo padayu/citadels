@@ -31,6 +31,8 @@ nav a.router-link-exact-active {
 .centered {
   margin: auto;
   text-align: center;
+  justify-content: center;
+  align-items: center;
 }
 </style>
 <script setup>

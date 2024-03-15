@@ -1,6 +1,6 @@
 <template>
   <img :class="{cardImage: true, hoveredOver: hover}" :src="require(`@/assets/card_images/${card.image}`)" alt="broken"
-       @mouseover="hover = true" @mouseleave="hover = false"/>
+       @mouseover="cardHoveredOver" @mouseleave="cardHoverCancel" @click="$emit('removeCard', card)"/>
 </template>
 
 <script>
@@ -15,6 +15,22 @@
     data() {
       return {
         hover: false,
+      }
+    },
+    methods: {
+      cardHoveredOver() {
+        this.hover = true;
+        this.enlargeCard();
+      },
+      cardHoverCancel() {
+        this.hover = false;
+        this.hideCard();
+      },
+      enlargeCard() {
+        this.$emit('enlargeCard', this.card);
+      },
+      hideCard() {
+        this.$emit('hideCard');
       }
     }
   }

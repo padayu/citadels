@@ -1,11 +1,12 @@
 <template>
-  <h1 class="centered">Citadels</h1>
-  <nav class="centered">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/room">Room</router-link> |
-    <router-link to="/game">Game</router-link>
-  </nav>
-  <router-view/>
+  <div class="page">
+    <router-view/>
+    <nav class="centered">
+      <router-link to="/">Home</router-link> |
+      <router-link to="/room">Room</router-link> |
+      <router-link to="/game">Game</router-link>
+    </nav>
+  </div>
 </template>
 
 <style>
@@ -33,6 +34,15 @@ nav a.router-link-exact-active {
   text-align: center;
   justify-content: center;
   align-items: center;
+}
+.page {
+  background-image: url('@/assets/background.png');
+  background-repeat: repeat;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
 }
 </style>
 <script setup>

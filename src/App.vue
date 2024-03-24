@@ -1,11 +1,6 @@
 <template>
   <div class="page">
     <router-view/>
-    <nav class="centered">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/room">Room</router-link> |
-      <router-link to="/game">Game</router-link>
-    </nav>
   </div>
 </template>
 

@@ -19,20 +19,5 @@ export default {
 }
 </script>
 
-<style scoped>
-.code {
-  position: absolute;
-  top: 20px;
-  right: 200px;
-}
-.start {
-  position: absolute;
-  bottom: 400px;
-  right: 280px;
-}
-.exit {
-  position: absolute;
-  bottom: 20px;
-  left: 20px;
-}
+<style scoped src="./styles/RoomView.scss" lang="scss">
 </style>

@@ -4,7 +4,7 @@
     <div class="actual_list">
       <custom-scrollbar :style="{ width: '690px', height: '540px' }" v-if="players.length > 0">
         <TransitionGroup name="roomPlayerList">
-          <RoomPlayerListItem
+          <room-player-list-item
               v-for="player in players"
               :player="player"
               :key="player.id"

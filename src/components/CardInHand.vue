@@ -1,14 +1,19 @@
 <template>
-  <img :class="{cardImage: true, hoveredOver: hover}" :src="require(`@/assets/card_images/${card.image}`)" alt="broken"
+  <img :class="{cardImage: true, hoveredOver: hover, active: this.active}" :src="require(`@/assets/card_images/${card.image}`)" alt="broken"
        @mouseover="cardHoveredOver" @mouseleave="cardHoverCancel" @click="$emit('removeCard', card)"/>
 </template>
 
 <script>
+
   export default {
     name: 'CardInHand',
     props: {
       card: {
         type: Object,
+        required: true,
+      },
+      active: {
+        type: Boolean,
         required: true,
       }
     },
@@ -20,28 +25,25 @@
     methods: {
       cardHoveredOver() {
         this.hover = true;
-        this.enlargeCard();
+        this.$store.dispatch('enlargedCard/enlargeCard', this.card);
       },
       cardHoverCancel() {
         this.hover = false;
-        this.hideCard();
+        this.$store.commit('enlargedCard/makeInvisible')
       },
-      enlargeCard() {
-        this.$emit('enlargeCard', this.card);
-      },
-      hideCard() {
-        this.$emit('hideCard');
-      }
-    }
+    },
   }
 </script>
 
 <style scoped>
   .cardImage {
-    width: 100px;
-    height: 150px;
+    width: 60px;
+    height: 90px;
   }
   .hoveredOver {
     transform: translateY(-10px);
+  }
+  .active {
+    box-shadow: yellow 0 0 10px;
   }
 </style>

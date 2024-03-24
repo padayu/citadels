@@ -18,16 +18,5 @@ export default {
 }
 </script>
 
-<style>
-.game_title {
-  font-family: 'Cinzel Decorative', cursive;
-  font-size: 5em;
-  color: yellow;
-  text-shadow: -4px 0 black, 0 4px black, 4px 0 black, 0 -4px black;
-  margin-top: 15px;
-  margin-bottom: 60px
-}
-.main_menu {
-  margin-top: 30px;
-}
+<style scoped src="./styles/HomeView.scss" lang="scss">
 </style>

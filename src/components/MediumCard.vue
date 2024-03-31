@@ -1,17 +1,20 @@
 <template>
   <div class="card">
-    <img :class="{cardImage: true, active: this.active}" :src="require(`@/assets/card_images/${card.image}`)" alt="broken"/>
+    <img :class="{cardImage: true, active: this.is_active}" :src="require(`@/assets/card_images/${card.image}`)" alt="broken"/>
     <div v-if="this.hover" class="description">
-      <p>{{ card.name }}</p>
+      <p class="card-name">{{ card.name }}</p>
+      <p class="card-cost">Стоимость: {{ card.cost }}</p>
       {{ card.description }}
     </div>
-    <div class="hoverTrigger" @mouseover="cardHoveredOver" @mouseleave="cardHoverCancel"></div>
+    <div :class="{hoverTrigger: true, clickable: this.is_active}" @mouseover="cardHoveredOver" @mouseleave="cardHoverCancel" @click="Interact"></div>
   </div>
 </template>
 
 <script>
+  import {mapState} from "vuex";
+
   export default {
-    name: 'CardInCity',
+    name: 'MediumCard',
     props: {
       card: {
         type: Object,
@@ -21,7 +24,7 @@
     data() {
       return {
         hover: false,
-        active: true,
+        is_active: true,
       }
     },
     methods: {
@@ -30,7 +33,20 @@
       },
       cardHoverCancel() {
         this.hover = false;
+      },
+      SendMessage(message) {
+        this.$store.dispatch('websocket/sendMessage', message)
+      },
+      Interact() {
+        if (this.is_active) {
+          this.$emit('cardClicked', this.card.id);
+        }
       }
+    },
+    computed: {
+      ...mapState({
+        ws: state => state.websocket.ws,
+      }),
     }
   }
 </script>
@@ -68,5 +84,17 @@
   }
   .active {
     box-shadow: yellow 1px 1px 10px, yellow -1px -1px 10px;
+  }
+  .clickable {
+    cursor: pointer;
+  }
+  .card-name {
+    margin-top: 2px;
+    margin-bottom: 0;
+  }
+  .card-cost {
+    margin-top: 0;
+    margin-bottom: 2px;
+    color: yellow;
   }
 </style>

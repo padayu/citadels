@@ -2,7 +2,42 @@
   <div class="page">
     <router-view/>
   </div>
+  <dialog-window v-if="dialog_visible">
+    <template v-slot:header>
+      {{ dialog_header }}
+    </template>
+    <template v-slot:content>
+      {{ dialog_content }}
+    </template>
+  </dialog-window>
 </template>
+
+<script>
+import {defineComponent, ref} from "vue";
+import {mapMutations, mapState} from "vuex";
+import DialogWindow from "@/components/UI/DialogWindow.vue";
+
+export default defineComponent({
+  name: 'App',
+  components: {DialogWindow},
+  created() {
+    this.$store.dispatch('websocket/initializeWebSocket');
+  },
+  computed: {
+    ...mapState({
+      dialog_visible: state => state.componentInfo.dialog_visible,
+      dialog_header: state => state.componentInfo.dialog_header,
+      dialog_content: state => state.componentInfo.dialog_content,
+    }),
+    ...mapMutations({
+      ShowDialog: "componentInfo/ShowDialog",
+      HideDialog: "componentInfo/HideDialog",
+      SetDialogHeader: "componentInfo/SetDialogHeader",
+      SetDialogContent: "componentInfo/SetDialogContent",
+    }),
+  }
+});
+</script>
 
 <style>
 #app {
@@ -40,5 +75,3 @@ nav a.router-link-exact-active {
   left: 0;
 }
 </style>
-<script setup>
-</script>

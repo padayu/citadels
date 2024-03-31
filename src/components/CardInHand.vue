@@ -1,9 +1,11 @@
 <template>
-  <img :class="{cardImage: true, hoveredOver: hover, active: this.active}" :src="require(`@/assets/card_images/${card.image}`)" alt="broken"
-       @mouseover="cardHoveredOver" @mouseleave="cardHoverCancel" @click="$emit('removeCard', card)"/>
+  <img :class="{cardImage: true, hoveredOver: hover, active: this.is_active}" :src="require(`@/assets/card_images/${card.image}`)" alt="broken"
+       @mouseover="cardHoveredOver" @mouseleave="cardHoverCancel" @click="Interact"/>
 </template>
 
 <script>
+
+  import {mapState} from "vuex";
 
   export default {
     name: 'CardInHand',
@@ -12,7 +14,7 @@
         type: Object,
         required: true,
       },
-      active: {
+      is_active: {
         type: Boolean,
         required: true,
       }
@@ -31,7 +33,20 @@
         this.hover = false;
         this.$store.commit('enlargedCard/makeInvisible')
       },
+      SendMessage(message) {
+        this.$store.dispatch('websocket/sendMessage', message)
+      },
+      Interact() {
+        if (this.is_active) {
+          this.SendMessage("card_in_hand_interact, id= ", this.card.id);
+        }
+      }
     },
+    computed: {
+      ...mapState({
+        ws: state => state.websocket.ws,
+      }),
+    }
   }
 </script>
 
@@ -45,5 +60,6 @@
   }
   .active {
     box-shadow: yellow 0 0 10px;
+    cursor: pointer;
   }
 </style>

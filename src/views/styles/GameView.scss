@@ -1,4 +1,4 @@
-.endTurn {
+.end-turn {
   position: absolute;
   bottom: 300px;
   right: 20px;
@@ -11,40 +11,49 @@
 .hand {
   position: absolute;
   bottom: 20px;
-  left: 500px;
+  left: 550px;
 }
-.playerBank {
+.player-bank {
   position: absolute;
   bottom: 20px;
   right: 20px;
 }
-.selfPlayerDisplay {
+.self-player-display {
   position: absolute;
   bottom: 20px;
-  right: 210px;
+  right: 180px;
 }
 .deck {
   position: absolute;
   top: 20px;
-  right: 20px;
+  right: 10px;
 }
-.selfCity {
+.self-city {
   position: absolute;
   top: 10px;
   left: 530px;
 }
-.gameBank {
+.game-bank {
   position: absolute;
   top: 10px;
-  right: 120px;
+  right: 100px;
 }
-.enlargedCard {
+.enlarged-card {
   position: absolute;
-  top: 190px;
-  left: 650px;
+  top: 220px;
+  left: 720px;
 }
-.gamePlayerList {
+.game-player-list {
   position: absolute;
   top: 10px;
   left: 10px;
+}
+.mini-character-bar {
+  position: absolute;
+  bottom: 20px;
+  left: 220px;
+}
+.game-log {
+  top: 220px;
+  right: 70px;
 }

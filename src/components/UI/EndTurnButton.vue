@@ -1,12 +1,19 @@
 <template>
-  <button class="end_turn">
+  <button :class="{end_turn: true, active: is_active}">
     <slot></slot>
   </button>
 </template>
 
 <script>
+import {mapState} from "vuex";
+
 export default {
-  name: "EndTurnButton"
+  name: "EndTurnButton",
+  computed: {
+    ...mapState({
+      is_active: state => state.gameInfo.gameState.EndTurnActive,
+    }),
+  }
 }
 </script>
 
@@ -20,5 +27,9 @@ export default {
     font-family: "JetBrains Mono ExtraBold", monospace;
     background-color: rgb(238, 220, 2);
     border: rgb(236, 149, 4) solid 4px;
+    cursor: pointer;
+  }
+  .active {
+    box-shadow: yellow 0 0 40px;
   }
 </style>

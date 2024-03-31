@@ -1,26 +1,30 @@
 <template>
-  <end-turn-button class="endTurn">КОНЕЦ ХОДА</end-turn-button>
+  <end-turn-button class="end-turn">КОНЕЦ ХОДА</end-turn-button>
   <exit-button class="exit">ВЫХОД</exit-button>
-  <div class="selfCity">
+  <div class="self-city">
     <self-city/>
   </div>
   <div class="hand">
     <hand-display/>
   </div>
-  <div class="playerBank">
+  <div class="player-bank">
     <player-bank></player-bank>
   </div>
-  <div class="gameBank">
+  <div class="game-bank">
     <game-bank/>
   </div>
   <self-character-display
       :active="this.self_character_active"
       :character="this.self_character"
-      class="selfPlayerDisplay"
+      class="self-player-display"
   />
-  <deck :deck_size="this.deck_size" class="deck"/>
-  <enlarged-card-view class="enlargedCard" :card="getEnlargedCard" :show="getVisible"/>
-  <game-player-list :players="players" class="gamePlayerList"/>
+  <deck class="deck"/>
+  <enlarged-card-view class="enlarged-card" :card="getEnlargedCard" :show="getVisible"/>
+  <game-player-list class="game-player-list"/>
+  <mini-character-bar class="mini-character-bar"></mini-character-bar>
+  <game-log class="game-log"></game-log>
+  <card-choice-window v-if="showCardChoice"></card-choice-window>
+  <character-choice-window v-if="showCharacterChoice"></character-choice-window>
 </template>
 
 <script>
@@ -37,147 +41,36 @@ import GameBank from "@/components/GameBank.vue";
 import EnlargedCardView from "@/components/EnlargedCardView.vue";
 import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
 import GamePlayerList from "@/components/GamePlayerList.vue";
+import MiniCharacterBar from "@/components/MiniCharacterBar.vue";
+import CardChoiceWindow from "@/components/CardChoiceWindow.vue";
+import CharacterChoiceWindow from "@/components/CharacterChoiceWindow.vue";
+import GameLog from "@/components/GameLog.vue";
 
 export default {
   name: 'GameView',
   components: {
+    GameLog,
+    CharacterChoiceWindow,
+    CardChoiceWindow,
+    MiniCharacterBar,
     GamePlayerList,
     EnlargedCardView,
     GameBank, SelfCity, Deck, SelfCharacterDisplay, PlayerBank, ExitButton, EndTurnButton, HandDisplay},
   data() {
     return {
       self_character_active: true,
-      deck_size: 10,
       self_character: {
         name: "Король",
         ability_description: "Получает 1 монету за каждый дворянский квартал в вашем городе.",
       },
-      players: [
-        {
-          name: "Игрок 1",
-          character: {
-            name: "Король",
-            image: "King.png",
-            ability_description: "Получает 1 монету за каждый дворянский квартал в вашем городе."
-          },
-          money: 10,
-          hand_size: 5,
-          city: [
-            {name: 'card1', id: 1, image: "gru1.png", description: "This is a blue card", color: "blue"},
-            {name: 'card2', id: 2, image: "gru2.png", description: "This is a red card", color: "red"},
-            {name: 'card3', id: 3, image: "gru3.png", description: "This is a pink card", color: "pink"},
-            {name: 'card4', id: 4, image: "gru4.png", description: "This is a yellow card", color: "yellow"},
-            {name: 'card5', id: 5, image: "gru5.png", description: "This is a green card", color: "green"},
-            {name: 'card6', id: 6, image: "gru1.png", description: "This is a blue card", color: "blue"},
-            {name: 'card7', id: 7, image: "gru2.png", description: "This is a red card", color: "red"},
-          ],
-        },
-        {
-          name: "Игрок 2",
-          character: {
-            name: "Чародей",
-            image: "Enchanter.png",
-            ability_description: "Чарует там все дела"
-          },
-          money: 10,
-          hand_size: 20,
-          city: [
-            {name: 'card1', id: 1, image: "gru1.png", description: "This is a blue card", color: "blue"},
-            {name: 'card2', id: 2, image: "gru2.png", description: "This is a red card", color: "red"},
-            {name: 'card3', id: 3, image: "gru3.png", description: "This is a pink card", color: "pink"},
-            {name: 'card4', id: 4, image: "gru4.png", description: "This is a yellow card", color: "yellow"}
-          ]
-        },
-        {
-          name: "Игрок 3",
-          character: {
-            name: "Чародей",
-            image: "Enchanter.png",
-            ability_description: "Чарует там все дела"
-          },
-          money: 10,
-          hand_size: 20,
-          city: [
-            {name: 'card1', id: 1, image: "gru1.png", description: "This is a blue card", color: "blue"},
-            {name: 'card2', id: 2, image: "gru2.png", description: "This is a red card", color: "red"},
-            {name: 'card3', id: 3, image: "gru3.png", description: "This is a pink card", color: "pink"},
-            {name: 'card4', id: 4, image: "gru4.png", description: "This is a yellow card", color: "yellow"}
-          ]
-        },
-        {
-          name: "Игрок 4",
-          character: {
-            name: "Чародей",
-            image: "Enchanter.png",
-            ability_description: "Чарует там все дела"
-          },
-          money: 10,
-          hand_size: 20,
-          city: [
-            {name: 'card1', id: 1, image: "gru1.png", description: "This is a blue card", color: "blue"},
-            {name: 'card2', id: 2, image: "gru2.png", description: "This is a red card", color: "red"},
-            {name: 'card3', id: 3, image: "gru3.png", description: "This is a pink card", color: "pink"},
-            {name: 'card4', id: 4, image: "gru4.png", description: "This is a yellow card", color: "yellow"}
-          ]
-        },
-        {
-          name: "Игрок 5",
-          character: {
-            name: "Чародей",
-            image: "Enchanter.png",
-            ability_description: "Чарует там все дела"
-          },
-          money: 10,
-          hand_size: 20,
-          city: [
-            {name: 'card1', id: 1, image: "gru1.png", description: "This is a blue card", color: "blue"},
-            {name: 'card2', id: 2, image: "gru2.png", description: "This is a red card", color: "red"},
-            {name: 'card3', id: 3, image: "gru3.png", description: "This is a pink card", color: "pink"},
-            {name: 'card4', id: 4, image: "gru4.png", description: "This is a yellow card", color: "yellow"}
-          ]
-        },
-        {
-          name: "Игрок 6",
-          character: {
-            name: "Чародей",
-            image: "Enchanter.png",
-            ability_description: "Чарует там все дела"
-          },
-          money: 10,
-          hand_size: 20,
-          city: [
-            {name: 'card1', id: 1, image: "gru1.png", description: "This is a blue card", color: "blue"},
-            {name: 'card2', id: 2, image: "gru2.png", description: "This is a red card", color: "red"},
-            {name: 'card3', id: 3, image: "gru3.png", description: "This is a pink card", color: "pink"},
-            {name: 'card4', id: 4, image: "gru4.png", description: "This is a yellow card", color: "yellow"}
-          ]
-        },
-        {
-          name: "Игрок 7",
-          character: {
-            name: "Чародей",
-            image: "Enchanter.png",
-            ability_description: "Чарует там все дела"
-          },
-          money: 10,
-          hand_size: 20,
-          city: [
-            {name: 'card1', id: 1, image: "gru1.png", description: "This is a blue card", color: "blue"},
-            {name: 'card2', id: 2, image: "gru2.png", description: "This is a red card", color: "red"},
-            {name: 'card3', id: 3, image: "gru3.png", description: "This is a pink card", color: "pink"},
-            {name: 'card4', id: 4, image: "gru4.png", description: "This is a yellow card", color: "yellow"},
-            {name: 'card1', id: 1, image: "gru1.png", description: "This is a blue card", color: "blue"},
-            {name: 'card2', id: 2, image: "gru2.png", description: "This is a red card", color: "red"},
-            {name: 'card3', id: 3, image: "gru3.png", description: "This is a pink card", color: "pink"},
-          ]
-        }
-      ]
     }
   },
   computed: {
     ...mapState({
       placeholder: state => state.enlargedCard.placeholder,
       enlargedCard: state => state.enlargedCard.enlargedCard,
+      showCardChoice: state => state.gameInfo.showCardChoice,
+      showCharacterChoice: state => state.gameInfo.showCharacterChoice,
     }),
     ...mapGetters({
       getEnlargedCard: "enlargedCard/getEnlargedCard",

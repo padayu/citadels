@@ -7,12 +7,14 @@
 </template>
 
 <script>
+import {mapState} from "vuex";
+
 export default {
   name: "PlayerBank",
-  data() {
-    return {
-      balance: 0,
-    }
+  computed: {
+    ...mapState({
+      balance: state => state.gameInfo.gameState.Player.Coins,
+    }),
   }
 }
 </script>

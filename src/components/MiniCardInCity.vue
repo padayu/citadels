@@ -1,15 +1,20 @@
 <template>
-  <div class="miniCardImitator" :style="{ backgroundColor: this.card.color }"
-       @mouseover="cardHoveredOver" @mouseleave="cardHoverCancel"/>
+  <div :class="{miniCardImitator: true, active: true}" :style="{ backgroundColor: this.card.color, active: this.is_active}"
+       @mouseover="cardHoveredOver" @mouseleave="cardHoverCancel" @click="Interact"/>
 </template>
 
 <script>
+import {mapState} from "vuex";
+
 export default {
   name: "MiniCardInCity",
   props: {
     card: {
       type: Object,
       required: true,
+    },
+    is_active: {
+      type: Boolean,
     }
   },
   methods: {
@@ -19,6 +24,19 @@ export default {
     cardHoverCancel() {
       this.$store.commit('enlargedCard/makeInvisible')
     },
+    SendMessage(message) {
+      this.$store.dispatch('websocket/sendMessage', message)
+    },
+    Interact() {
+      if (this.is_active) {
+        this.SendMessage("mini_card_interact, id= ", this.card.id);
+      }
+    },
+  },
+  computed: {
+    ...mapState({
+      ws: state => state.websocket.ws,
+    }),
   }
 }
 </script>
@@ -28,5 +46,9 @@ export default {
   width: 26px;
   height: 39px;
   border: 3px solid black;
+}
+.active {
+  box-shadow: -2px -2px yellow, -2px 2px yellow, 2px -2px yellow, 2px 2px yellow;
+  cursor: pointer;
 }
 </style>

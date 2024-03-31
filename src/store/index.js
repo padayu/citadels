@@ -1,5 +1,9 @@
 import { createStore } from 'vuex'
 import { enlargedCardModule } from '@/store/enlargedCardModule'
+import websocketModule from "@/store/websocketModule";
+import messageHandlerModule from "@/store/messageHandlerModule";
+import componentInfoModule from "@/store/componentInfoModule";
+import gameInfoModule from "@/store/gameInfoModule";
 
 export default createStore({
   state: {
@@ -11,6 +15,10 @@ export default createStore({
   actions: {
   },
   modules: {
-    enlargedCard: enlargedCardModule
+    enlargedCard: enlargedCardModule,
+    websocket: websocketModule,
+    messageHandler: messageHandlerModule,
+    componentInfo: componentInfoModule,
+    gameInfo: gameInfoModule,
   }
 })

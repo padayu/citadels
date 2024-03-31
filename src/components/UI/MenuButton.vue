@@ -20,5 +20,6 @@ export default {
   border-radius: 20px;
   font-size: 2em;
   font-family: "JetBrains Mono ExtraBold", monospace;
+  cursor: pointer;
 }
 </style>

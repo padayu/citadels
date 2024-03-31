@@ -8,12 +8,16 @@ import playerBank from "@/components/PlayerBank.vue";
 import selfCharacterDisplay from "@/components/SelfCharacterDisplay.vue";
 import deck from "@/components/Deck.vue";
 import selfCity from "@/components/SelfCity.vue";
-import cardInCity from "@/components/CardInCity.vue";
+import MediumCard from "@/components/MediumCard.vue";
 import gameBank from "@/components/GameBank.vue";
 import gamePlayerList from "@/components/GamePlayerList.vue";
 import gamePlayerListItem from "@/components/GamePlayerListItem.vue";
 import miniCardInCity from "@/components/MiniCardInCity.vue";
 import miniCharacterDisplay from "@/components/MiniCharacterDisplay.vue";
+import cardChoiceWindow from "@/components/CardChoiceWindow.vue";
+import characterChoiceWindow from "@/components/CharacterChoiceWindow.vue";
+import gameLog from "@/components/GameLog.vue";
+
 
 
 export default [
@@ -27,10 +31,13 @@ export default [
     selfCharacterDisplay,
     deck,
     selfCity,
-    cardInCity,
+    MediumCard,
     gameBank,
     gamePlayerList,
     gamePlayerListItem,
     miniCardInCity,
-    miniCharacterDisplay
+    miniCharacterDisplay,
+    cardChoiceWindow,
+    characterChoiceWindow,
+    gameLog
 ]

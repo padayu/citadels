@@ -1,20 +1,23 @@
 <template>
   <div class="player"
        :style="{textShadow: `
-       1px 0 ${playerColors[player.id % playerColors.length]},
-       0 1px ${playerColors[player.id % playerColors.length]},
-       1px 0 ${playerColors[player.id % playerColors.length]},
-       0 -1px ${playerColors[player.id % playerColors.length]}`}">
-    {{ player.name }}
-    <button class="kick">Кикнуть</button>
+       1px 0 ${playerColors[displayedPlayer.id % playerColors.length]},
+       0 1px ${playerColors[displayedPlayer.id % playerColors.length]},
+       1px 0 ${playerColors[displayedPlayer.id % playerColors.length]},
+       0 -1px ${playerColors[displayedPlayer.id % playerColors.length]}`}">
+    {{ displayedPlayer.name }}
+    <img class="ready" v-if="displayedPlayer.ready" :src="require('@/assets/ready_icon.png')">
+    <button v-if="isHost && notSelf" class="kick" @click="Kick">Кикнуть</button>
   </div>
 </template>
 
 <script>
+import {mapState} from "vuex";
+
 export default {
   name: 'RoomPlayerListItem',
   props: {
-    player: {
+    displayedPlayer: {
       type: Object,
       required: true,
     }
@@ -34,18 +37,41 @@ export default {
         'rgb(255, 255, 255)'
       ],
     }
+  },
+  methods: {
+    SendMessage(message) {
+      this.$store.dispatch('websocket/sendMessage', message)
+    },
+    Kick() {
+      this.SendMessage({
+        type: "lobby_kick",
+        payload: {"code": this.roomCode, "name": this.displayedPlayer.name}
+      })
+    }
+  },
+  computed: {
+    ...mapState({
+      isHost: state => state.gameInfo.isHost,
+      roomCode: state => state.gameInfo.roomCode,
+      playerName: state => state.gameInfo.selfPlayerName,
+    }),
+    notSelf() {
+      return this.displayedPlayer.name !== this.playerName;
+    },
   }
 }
 </script>
 
 <style scoped>
 .player {
+  display: flex;
   height: 45px;
   margin: 10px;
   border: solid rgb(0, 0, 0) 2px;
   padding: 5px;
   font-size: 2em;
   font-family: "JetBrains Mono ExtraBold", monospace;
+  align-items: center;
 }
 .kick {
   color: black;
@@ -56,10 +82,13 @@ export default {
   font-size: 0.8em;
   font-family: "JetBrains Mono ExtraBold", monospace;
   cursor: pointer;
-  float: right;
+  position: absolute;
+  right: 10px;
   margin-right: 10px;
 }
-.colored_outline {
-
+.ready {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
 }
 </style>

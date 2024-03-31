@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import {Vue} from "vue-class-component";
 
 const routes = [
   {
@@ -23,5 +24,6 @@ const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
 })
+Vue.router = router;
 
 export default router

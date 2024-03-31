@@ -4,7 +4,7 @@
     <TransitionGroup name="gamePlayerList">
       <game-player-list-item
           v-for="player in players"
-          :player="player"
+          :displayedPlayer="player"
           :key="player.id"
           class="item"
       />
@@ -15,15 +15,15 @@
 
 <script>
 import GamePlayerListItem from "@/components/GamePlayerListItem.vue";
+import {mapState} from "vuex";
 
 export default {
   name: "GamePlayerList",
   components: {GamePlayerListItem},
-  props: {
-    players: {
-      type: Array,
-      required: true,
-    }
+  computed: {
+    ...mapState({
+      players: state => state.gameInfo.gameState.Players,
+    }),
   }
 }
 </script>

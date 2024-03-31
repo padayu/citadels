@@ -1,41 +1,49 @@
 <template>
   <div class="characterDisplay">
-    <img :class="{characterImage: true, active: this.active}"
-         src="../assets/character_images/King.png" alt="broken"/>
-    <img class="crownImage" src="@/assets/crown.png" alt="broken"/>
-    <div class="hoverTrigger" @mouseover="characterHoveredOver" @mouseleave="characterHoverCancel"></div>
+    <img :class="{characterImage: true, active: this.is_active}"
+         :src="require(`@/assets/character_images/${this.character.image}`)" alt="broken"/>
+    <img v-if="has_crown" class="crownImage" src="@/assets/crown.png" alt="broken"/>
+    <div :class="{hoverTrigger: true, clickable: this.is_active}" @mouseover="CharacterHoveredOver" @mouseleave="CharacterHoverCancel" @click="Interact"></div>
     <div v-if="this.hover" class="description">
       <div class="characterName">{{ this.character.name }}</div>
-      <div class="characterAbilityDescription">{{ this.character.ability_description }}</div>
+      <div class="characterAbilityDescription">{{ this.character.description }}</div>
     </div>
   </div>
 </template>
 
 <script>
+import {mapState} from "vuex";
+
 export default {
   name: 'SelfCharacterDisplay',
   data() {
     return {
       hover: false,
-    }
-  },
-  props: {
-    character: {
-      type: Object,
-      required: true,
-    },
-    active: {
-      type: Boolean,
-      required: true,
+      is_active: true,
     }
   },
   methods: {
-    characterHoveredOver() {
+    CharacterHoveredOver() {
       this.hover = true;
     },
-    characterHoverCancel() {
+    CharacterHoverCancel() {
       this.hover = false;
     },
+    SendMessage(message) {
+      this.$store.dispatch('websocket/sendMessage', message)
+    },
+    Interact() {
+      if (this.active) {
+        this.SendMessage("self_character_interact");
+      }
+    }
+  },
+  computed: {
+    ...mapState({
+      ws: state => state.websocket.ws,
+      has_crown: state => state.gameInfo.gameState.Player.Crown,
+      character: state => state.gameInfo.gameState.Player.Character,
+    }),
   }
 }
 </script>
@@ -57,6 +65,9 @@ export default {
 }
 .active {
   box-shadow: yellow 1px 1px 10px, yellow -1px -1px 10px;
+}
+.clickable {
+  cursor: pointer;
 }
 .characterDisplay {
   width: 200px;

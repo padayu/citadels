@@ -1,18 +1,30 @@
 <template>
   <div class="BankTitle">Общий банк:</div>
-  <div class="container">
-    <img :src="require('@/assets/coin.png')" alt="broken" class="coin_image"/>
-    <p class="balance_number">{{ this.balance }}</p>
+  <div :class="{container: true, active: this.is_active}" @click="Interact">
+    <img :src="require('@/assets/game_bank.png')" alt="broken" class="purse_image"/>
   </div>
 </template>
 
 <script>
+import {mapState} from "vuex";
+
 export default {
   name: "GameBank",
-  data() {
-    return {
-      balance: 0,
+  methods: {
+    SendMessage(message) {
+      this.$store.dispatch('websocket/sendMessage', message)
+    },
+    Interact() {
+      if (this.is_active) {
+        this.SendMessage("game_bank_interact");
+      }
     }
+  },
+  computed: {
+    ...mapState({
+      ws: state => state.websocket.ws,
+      is_active: state => state.gameInfo.gameState.GameBankActive,
+    }),
   }
 }
 </script>
@@ -20,24 +32,17 @@ export default {
 <style scoped>
 .container {
   display: flex;
-  width: 145px;
-  height: 60px;
-  border: rgb(200, 83, 55) solid 4px;
+  width: 150px;
+  height: 150px;
+  border: rgb(28, 83, 55) solid 4px;
   border-radius: 20px;
-  background-color: rgb(255, 160, 160);
+  background-color: rgb(167, 220, 175);
   align-items: center;
 }
-.coin_image {
-  width: 50px;
-  height: 50px;
-  margin: 5px;
-}
-.balance_number {
-  font-family: 'Cinzel Decorative', cursive;
-  font-size: 2em;
-  color: yellow;
-  text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
-  margin: 5px;
+.purse_image {
+  width: 150px;
+  height: 150px;
+  margin: auto;
 }
 .BankTitle {
   font-family: 'Cinzel Decorative', cursive;
@@ -46,5 +51,9 @@ export default {
   text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
   margin: 5px;
   text-align: center;
+}
+.active {
+  box-shadow: yellow 0 0 10px;
+  cursor: pointer;
 }
 </style>

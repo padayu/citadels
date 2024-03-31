@@ -1,38 +1,44 @@
 <template>
-  <div class="cityTitle">Ваш город:</div>
-  <TransitionGroup name="City" class="container">
-    <card-in-city v-for="card in city" :active="true" :card="card" :key="card.id" class="item"/>
-  </TransitionGroup>
+  <div class="container">
+    <div class="cityTitle">Ваш город:</div>
+    <div>
+      <TransitionGroup name="City">
+        <medium-card v-for="card in this.city" :active="true" :card="card" :key="card.id" class="item"
+        @cardClicked="cardClickedMessage"/>
+      </TransitionGroup>
+    </div>
+  </div>
 </template>
 
 <script>
-import CardInCity from "@/components/CardInCity.vue";
+import MediumCard from "@/components/MediumCard.vue";
+import {mapState} from "vuex";
 
 export default {
   name: "SelfCity",
-  components: {CardInCity},
-  data() {
-    return {
-      city: [
-        { name: 'card1', id: 1, image: "gru1.png", description: "This is a blue card", color: "blue"},
-        { name: 'card2', id: 2, image: "gru2.png", description: "This is a red card", color: "red"},
-        { name: 'card3', id: 3, image: "gru3.png", description: "This is a pink card", color: "pink"},
-        { name: 'card4', id: 4, image: "gru4.png", description: "This is a yellow card", color: "yellow"},
-        { name: 'card5', id: 5, image: "gru5.png", description: "This is a green card", color: "green"},
-        { name: 'card6', id: 6, image: "gru1.png", description: "This is a blue card", color: "blue"},
-        { name: 'card7', id: 7, image: "gru2.png", description: "This is a red card", color: "red"},
-          ]
-    }
+  components: {MediumCard},
+  methods: {
+    SendMessage(message) {
+      this.$store.dispatch('websocket/sendMessage', message)
+    },
+    cardClickedMessage(cardId) {
+      this.SendMessage("self_city_card_clicked " + cardId);
+    },
+  },
+  computed: {
+    ...mapState({
+      city: state => state.gameInfo.gameState.Player.City,
+    }),
   }
 }
 </script>
 
 <style scoped>
 .container {
-  display: flex;
-  overflow-x: auto;
-  width: 600px;
-  height: 400px;
+  width: 700px;
+  height: 190px;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 20px;
 }
 .cityTitle {
   margin-bottom: 10px;
@@ -43,6 +49,7 @@ export default {
 }
 .item {
   display: inline-block;
-  margin-right: 10px;
+  margin-right: 5px;
+  margin-left: 5px;
 }
 </style>

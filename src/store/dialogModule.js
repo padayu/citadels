@@ -21,6 +21,12 @@ export default {
         }
     },
     actions: {
+        OpenDialog({ rootState, commit }, payload) {
+            commit("dialog/ShowDialog", null, { root: true });
+            commit("dialog/SetDialogHeader", payload.header, { root: true });
+            console.log(payload.content);
+            commit("dialog/SetDialogContent", payload.content, { root: true });
+        }
     },
     namespaced: true
 }

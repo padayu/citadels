@@ -9,7 +9,7 @@ export default {
                 if (message["payload"]["status"] !== 200) {
                     const header = "Ошибка";
                     const content = message["payload"]["message"];
-                    dispatch("OpenDialog", {header, content});
+                    dispatch("dialog/OpenDialog", {header, content}, { root: true });
                 }
                 else {/*
                     const header = "УСПЕХ!!!!!!";
@@ -71,12 +71,6 @@ export default {
                 commit("gameInfo/OpenScoreboard", message.payload.scores, { root: true });
             }
         },
-        OpenDialog({ rootState, commit }, payload) {
-            commit("dialog/ShowDialog", null, { root: true });
-            commit("dialog/SetDialogHeader", payload.header, { root: true });
-            console.log(payload.content);
-            commit("dialog/SetDialogContent", payload.content, { root: true });
-        }
     },
     namespaced: true
 };

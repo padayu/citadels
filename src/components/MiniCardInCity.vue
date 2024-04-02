@@ -1,5 +1,5 @@
 <template>
-  <div :class="{miniCardImitator: true, active: true}" :style="{ backgroundColor: this.card.color, active: this.is_active}"
+  <div :class="{miniCardImitator: true, active: this.card.active}" :style="{ backgroundColor: this.card.color, active: this.is_active}"
        @mouseover="cardHoveredOver" @mouseleave="cardHoverCancel" @click="Interact"/>
 </template>
 
@@ -13,9 +13,6 @@ export default {
       type: Object,
       required: true,
     },
-    is_active: {
-      type: Boolean,
-    }
   },
   methods: {
     cardHoveredOver() {

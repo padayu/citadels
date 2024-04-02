@@ -2,7 +2,7 @@
   <h1 class="centered game-title">Citadels</h1>
   <div class="centered main-menu"><menu-input v-model="this.input_player_name" placeholder="ИМЯ"/></div>
   <div class="centered main-menu"><menu-button @click="CreateRoom">СОЗДАТЬ ИГРУ</menu-button></div>
-  <div class="centered main-menu"><menu-input v-model="this.input_room_code" placeholder="КОД"/></div>
+  <div class="centered main-menu"><menu-input v-model="this.input_room_code" :upper="true" placeholder="КОД"/></div>
   <div class="centered main-menu"><menu-button @click="JoinRoom">ПРИСОЕДИНИТЬСЯ</menu-button></div>
 </template>
 
@@ -11,15 +11,15 @@
 import MenuButton from "@/components/UI/MenuButton.vue";
 import MenuInput from "@/components/UI/MenuInput.vue";
 import DialogWindow from "@/components/UI/DialogWindow.vue";
-import {mapActions, mapMutations, mapState} from "vuex";
+import {mapState} from "vuex";
 
 export default {
   name: 'HomeView',
   components: {DialogWindow, MenuInput, MenuButton},
   data () {
     return {
-      input_player_name: "",
-      input_room_code: ""
+      input_player_name: "player" + (Math.floor(Math.random() * (1000 - 1)) + 1),
+      input_room_code: "",
     }
   },
   methods: {

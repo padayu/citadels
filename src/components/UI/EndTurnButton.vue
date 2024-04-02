@@ -1,5 +1,5 @@
 <template>
-  <button :class="{end_turn: true, active: is_active}">
+  <button :class="{end_turn: true, active: is_active}" @click="EndTurn">
     <slot></slot>
   </button>
 </template>
@@ -9,8 +9,27 @@ import {mapState} from "vuex";
 
 export default {
   name: "EndTurnButton",
+  methods: {
+    SendMessage(message) {
+      this.$store.dispatch('websocket/sendMessage', message)
+    },
+    EndTurn() {
+      if (this.is_active) {
+        this.SendMessage({
+          "type": "game_activate_ability",
+          "payload": {
+            "code": this.code,
+            "name": this.name,
+            "ability_key": "base_end_turn",}
+        })
+      }
+    }
+  },
   computed: {
     ...mapState({
+      ws: state => state.websocket.ws,
+      code: state => state.gameInfo.roomCode,
+      name: state => state.gameInfo.selfPlayerName,
       is_active: state => state.gameInfo.gameState.EndTurnActive,
     }),
   }

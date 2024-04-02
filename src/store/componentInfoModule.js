@@ -18,7 +18,6 @@ export default {
         },
         SetDialogContent(state, content) {
             state.dialog_content = content;
-            console.log("SetDialogContent: ", content);
         }
     },
     actions: {

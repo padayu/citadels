@@ -1,25 +1,34 @@
 <template>
   <div class="characterDisplay">
-    <img :class="{characterImage: true, active: this.is_active}"
+    <img class="characterImage"
          :src="require(`@/assets/character_images/${this.character.image}`)" alt="broken"/>
     <img v-if="has_crown" class="crownImage" src="@/assets/crown.png" alt="broken"/>
-    <div :class="{hoverTrigger: true, clickable: this.is_active}" @mouseover="CharacterHoveredOver" @mouseleave="CharacterHoverCancel" @click="Interact"></div>
+    <div class="hoverTrigger"
+         @mouseover="CharacterHoveredOver" @mouseleave="CharacterHoverCancel" @click="Interact"></div>
+    <div class="ability-button-container">
+      <ability-button v-for="ability in this.character.abilities" :key="ability.name" :ability="ability">
+        {{ ability.name }}
+      </ability-button>
+    </div>
     <div v-if="this.hover" class="description">
       <div class="characterName">{{ this.character.name }}</div>
-      <div class="characterAbilityDescription">{{ this.character.description }}</div>
+      <div class="characterAbilityDescription">
+        <div v-for="item in this.character.description" v-html="item"></div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import {mapState} from "vuex";
+import AbilityButton from "@/components/UI/AbilityButton.vue";
 
 export default {
   name: 'SelfCharacterDisplay',
+  components: {AbilityButton},
   data() {
     return {
       hover: false,
-      is_active: true,
     }
   },
   methods: {
@@ -63,12 +72,6 @@ export default {
   top: -20px;
   left: 0;
 }
-.active {
-  box-shadow: yellow 1px 1px 10px, yellow -1px -1px 10px;
-}
-.clickable {
-  cursor: pointer;
-}
 .characterDisplay {
   width: 200px;
   height: 350px;
@@ -88,7 +91,7 @@ export default {
 }
 .characterAbilityDescription {
   font-family: 'Cinzel Decorative', cursive;
-  font-size: 1em;
+  font-size: 0.7em;
   color: white;
   position: absolute;
   top: 140px;
@@ -106,5 +109,16 @@ export default {
   left: 15px;
   top: 100px;
   background-color: rgba(0, 0, 0, 0);
+}
+.ability-button-container {
+  position: absolute;
+  top: 120px;
+  left: 150px;
+  width: 200px;
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 </style>

@@ -1,16 +1,19 @@
 <template>
   <div class="characterDisplay">
     <img :class="{characterImage: true, active: this.is_active}"
-         :src="require(`@/assets/character_images/${this.character.image}`)" alt="broken"/>
+         :src="require(`@/assets/character_images/${this.defaultImage}`)" alt="broken"/>
     <img class="crownImage" v-if="this.has_crown" src="@/assets/crown.png" alt="broken"/>
-    <img class="absentImage" v-if="this.character.is_absent" src="@/assets/absent.png" alt="broken"/>
-    <img class="deadImage" v-if="this.character.is_dead" src="@/assets/dead.png" alt="broken"/>
-    <img class="robbedImage" v-if="this.character.is_robbed" src="@/assets/robbed.png" alt="broken"/>
+    <img class="absentImage" v-if="this.character.absent" src="@/assets/absent.png" alt="broken"/>
+    <img class="deadImage" v-if="this.character.dead" src="@/assets/dead.png" alt="broken"/>
+    <img class="robbedImage" v-if="this.character.robbed" src="@/assets/robbed.png" alt="broken"/>
+    <img class="turnMarker" v-if="this.character.turn" src="@/assets/turn_marker.png" alt="broken"/>
     <div :class="{hoverTrigger: true, clickable: this.is_active}"
          @mouseover="characterHoveredOver" @mouseleave="characterHoverCancel" @click="Interact"></div>
     <div v-if="this.hover" class="description">
-      <div class="characterName">{{ this.character.name }}</div>
-      <div class="characterAbilityDescription">{{ this.character.ability_description }}</div>
+      <div class="characterName">{{ this.character.card.name }}</div>
+      <div class="characterAbilityDescription">
+        <div v-for="item in this.character.card.description" v-html="item"></div>
+      </div>
     </div>
   </div>
 </template>
@@ -23,15 +26,18 @@ export default {
   data() {
     return {
       hover: false,
-      has_crown: false,
-      is_active: true,
     }
   },
   props: {
     character: {
       type: Object,
       required: true,
-    }
+    },
+    is_active: {
+      type: Boolean,
+      required: true,
+    },
+    has_crown: Boolean,
   },
   methods: {
     SendMessage(message) {
@@ -39,7 +45,7 @@ export default {
     },
     Interact() {
       if (this.is_active) {
-        this.SendMessage("mini_character_interact, id= ", this.character.id);
+        this.$emit("characterClicked", this.character.card.class);
       }
     },
     characterHoveredOver() {
@@ -53,6 +59,13 @@ export default {
     ...mapState({
       ws: state => state.websocket.ws,
     }),
+    defaultImage() {
+      if (this.character.card.image === "") {
+        return "Unknown.png"
+      } else {
+        return this.character.card.image;
+      }
+    }
   }
 }
 </script>
@@ -98,10 +111,17 @@ export default {
   top: -15px;
   left: 0;
 }
+.turnMarker {
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  top: -40px;
+  left: 0;
+}
 .description {
   position: absolute;
   z-index: 1;
-  right: 0px;
+  right: 0;
   top: -105px;
 }
 .characterName {
@@ -110,7 +130,7 @@ export default {
   color: white;
   position: absolute;
   top: 55px;
-  left: 0px;
+  left: 0;
   width: 300px;
   height: 25px;
   background-color: rgba(0, 0, 0, 0.7);
@@ -119,11 +139,11 @@ export default {
 }
 .characterAbilityDescription {
   font-family: 'Cinzel Decorative', cursive;
-  font-size: 1em;
+  font-size: 0.7em;
   color: white;
   position: absolute;
   top: 85px;
-  left: 0px;
+  left: 0;
   width: 300px;
   height: 100px;
   background-color: rgba(0, 0, 0, 0.7);
@@ -134,8 +154,8 @@ export default {
   width: 30px;
   height: 45px;
   position: absolute;
-  left: 0px;
-  top: 0px;
+  left: 0;
+  top: 0;
   background-color: rgba(0, 0, 0, 0);
 }
 .active {

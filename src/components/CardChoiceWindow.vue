@@ -3,7 +3,7 @@
   <div class="dialog">
     <h2 class="header">Выберите карту</h2>
     <div class="card-container">
-      <medium-card v-for="card in cards" :card="card" :key="card.id" class="card"/>
+      <medium-card v-for="card in cards" :card="card" :key="card.id" class="card" @cardClicked="CommitChoice"/>
     </div>
   </div>
   </div>
@@ -16,8 +16,26 @@ import {mapState} from "vuex";
 export default {
   name: "CardChoiceWindow",
   components: {MediumCard},
+  methods: {
+    SendMessage(message) {
+      this.$store.dispatch('websocket/sendMessage', message)
+    },
+    CommitChoice(cardId) {
+      this.SendMessage({
+        "type": "game_choose_card",
+        "payload": {
+          "name": this.name,
+          "code": this.code,
+          "id": cardId,
+        }
+      });
+      this.$store.commit('gameInfo/CloseCardChoice');
+    }
+  },
   computed: {
     ...mapState({
+      name: state => state.gameInfo.selfPlayerName,
+      code: state => state.gameInfo.roomCode,
       cards: state => state.gameInfo.cardOptions,
     }),
   }

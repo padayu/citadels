@@ -17,10 +17,14 @@ export default {
             const ws = new WebSocket('ws://192.168.31.93:1337/ws');
             ws.onopen = () => console.log('WebSocket connection established');
             ws.onmessage = (event) => {
-                console.log('Received message:', event.data);
+                console.log('Received message:', JSON.stringify(JSON.parse(event.data), null, 2));
                 dispatch('messageHandler/HandleMessage', JSON.parse(event.data), { root: true });
             };
-            ws.onclose = () => console.log('WebSocket connection closed');
+            ws.onclose = () => {
+                console.log('WebSocket connection closed');
+                console.log('Reconnecting...');
+                setTimeout(() => dispatch('initializeWebSocket'), 1000);
+            };
             ws.onerror = (error) => console.error('WebSocket error:', error);
             commit('SET_WS', ws);
             console.log('WebSocket initialized')

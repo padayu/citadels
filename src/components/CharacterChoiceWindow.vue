@@ -4,9 +4,7 @@
     <div class="character-choice-window-header">
       <h2>Выберите персонажа</h2>
     </div>
-    <div class="character-container">
-      <mini-character-display character="character" v-for="character in characters" :key="character.id" class="item"/>
-    </div>
+    <mini-character-bar class="characters"></mini-character-bar>
   </div>
   </div>
 </template>
@@ -14,10 +12,11 @@
 <script>
 import MiniCharacterDisplay from "@/components/MiniCharacterDisplay.vue";
 import {mapState} from "vuex";
+import MiniCharacterBar from "@/components/MiniCharacterBar.vue";
 
 export default {
   name: "CharacterChoiceWindow",
-  components: {MiniCharacterDisplay},
+  components: {MiniCharacterBar, MiniCharacterDisplay},
   computed: {
     ...mapState({
       characters: state => state.gameInfo.choosableCharacters,
@@ -59,13 +58,12 @@ export default {
   text-align: center;
   text-shadow: 2px 0 0 black, -2px 0 0 black, 0 -2px 0 black, 0 2px 0 black;
 }
-.character-container {
+.characters {
+  width: 100%;
+  height: 100%;
   display: flex;
-  flex-direction: row;
-  position: absolute;
-  top: 40%;
-}
-.item {
-  margin: 5px;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
 }
 </style>

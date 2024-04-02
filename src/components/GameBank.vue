@@ -16,13 +16,21 @@ export default {
     },
     Interact() {
       if (this.is_active) {
-        this.SendMessage("game_bank_interact");
+        this.SendMessage({
+          "type": "game_activate_ability",
+          "payload": {
+            "code": this.code,
+            "name": this.name,
+            "ability_key": "base_loot_bank",}
+        })
       }
     }
   },
   computed: {
     ...mapState({
       ws: state => state.websocket.ws,
+      code: state => state.gameInfo.roomCode,
+      name: state => state.gameInfo.selfPlayerName,
       is_active: state => state.gameInfo.gameState.GameBankActive,
     }),
   }

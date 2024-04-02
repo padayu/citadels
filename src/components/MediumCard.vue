@@ -1,12 +1,12 @@
 <template>
   <div class="card">
-    <img :class="{cardImage: true, active: this.is_active}" :src="require(`@/assets/card_images/${card.image}`)" alt="broken"/>
+    <img :class="{cardImage: true, active: this.card.active}" :src="require(`@/assets/card_images/${card.image}`)" alt="broken"/>
     <div v-if="this.hover" class="description">
       <p class="card-name">{{ card.name }}</p>
-      <p class="card-cost">Стоимость: {{ card.cost }}</p>
-      {{ card.description }}
+      <p class="card-cost">Стоимость: {{ card.price }}</p>
+      {{ this.descriptionContent }}
     </div>
-    <div :class="{hoverTrigger: true, clickable: this.is_active}" @mouseover="cardHoveredOver" @mouseleave="cardHoverCancel" @click="Interact"></div>
+    <div :class="{hoverTrigger: true, clickable: this.card.active}" @mouseover="cardHoveredOver" @mouseleave="cardHoverCancel" @click="Interact"></div>
   </div>
 </template>
 
@@ -24,7 +24,6 @@
     data() {
       return {
         hover: false,
-        is_active: true,
       }
     },
     methods: {
@@ -38,7 +37,7 @@
         this.$store.dispatch('websocket/sendMessage', message)
       },
       Interact() {
-        if (this.is_active) {
+        if (this.card.active) {
           this.$emit('cardClicked', this.card.id);
         }
       }
@@ -47,6 +46,13 @@
       ...mapState({
         ws: state => state.websocket.ws,
       }),
+      descriptionContent() {
+        let content = "";
+        for (const index in this.card.description) {
+          content += this.card.description[index] + "\n";
+        }
+        return content;
+      },
     }
   }
 </script>
@@ -63,6 +69,7 @@
     position: absolute;
     top: 0;
     left: 0;
+    border-radius: 12px;
   }
   .hoverTrigger {
     width: 90px;
@@ -70,17 +77,19 @@
     position: absolute;
     top: 0;
     left: 0;
+    border-radius: 12px;
   }
   .description {
     width: 90px;
     height: 135px;
     background-color: rgba(0, 0, 0, 0.7);
     text-align: center;
-    font-size: 0.8em;
+    font-size: 0.6em;
     color: white;
     position: absolute;
     top: 0;
     left: 0;
+    border-radius: 12px;
   }
   .active {
     box-shadow: yellow 1px 1px 10px, yellow -1px -1px 10px;

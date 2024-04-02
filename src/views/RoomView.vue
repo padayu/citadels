@@ -16,7 +16,7 @@ import RoomCodeDisplay from "@/components/RoomCodeDisplay.vue";
 import ExitButton from "@/components/UI/ExitButton.vue";
 import ReadyButton from "@/components/UI/ReadyButton.vue";
 import NotReadyButton from "@/components/UI/NotReadyButton.vue";
-import {mapMutations, mapState} from "vuex";
+import {mapState} from "vuex";
 import router from "@/router";
 
 export default {
@@ -41,8 +41,8 @@ export default {
     },
     StartGame() {
       this.SendMessage({
-        type: "start_game",
-        payload: {}
+        type: "lobby_start_game",
+        payload: {"code": this.roomCode}
       })
     }
   },

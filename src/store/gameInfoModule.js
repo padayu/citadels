@@ -1,3 +1,5 @@
+import {setDefaultCardImages} from "@/utility";
+
 export default {
     state: {
         selfPlayerName: "",
@@ -6,12 +8,13 @@ export default {
         lobbyPlayerList: [],
         choosableCharacters: [],
         showCharacterChoice: false,
-        messages: ["abobus", "amogus", "amoamomogus gus sus usus s sssssssssssss uuuuuU"],
-        cardOptions: [
-            {name: "aaaa", description: "asdsa", image: "cardPlaceholder.png"},
-            {name: "aaaa", description: "asdsa", image: "cardPlaceholder.png"},
-            {name: "aaaa", description: "asdsa", image: "cardPlaceholder.png"}],
+        chatMessages: [],
+        cardOptions: [],
         showCardChoice: false,
+        showScoreboard: false,
+        scoreboard: [{"name": "ads", "score": 23},
+            {"name": "ads", "score": 23},
+            {"name": "ads", "score": 23}],
         gameState: {
             Players: [],
             Characters: [],
@@ -25,6 +28,7 @@ export default {
                     description: "??????????",
                     image: "Unknown.png",
                     type: null,
+                    abilities: [],
                 },
             },
             DeckSize: 0,
@@ -43,7 +47,7 @@ export default {
         SetIsHost(state, isHost) {
             state.isHost = isHost;
         },
-        SetPlayerList(state, playerList) {
+        SetLobbyPlayerList(state, playerList) {
             if (playerList !== null) {
                 state.lobbyPlayerList = playerList;
             }
@@ -76,30 +80,118 @@ export default {
             state.gameState.Player.Character.description = description;
         },
         SetSelfCharacterImage(state, image) {
+            if (image === "" || image == null) {
+                image = "Unknown.png";
+            }
             state.gameState.Player.Character.image = image;
         },
         SetSelfCharacterType(state, type) {
             state.gameState.Player.Character.type = type;
+        },
+        SetCity(state, city) {
+            state.gameState.Player.City = setDefaultCardImages(city);
+        },
+        SetHand(state, hand) {
+            state.gameState.Player.Hand = setDefaultCardImages(hand);
+        },
+        SetGamePlayerList(state, players) {
+            for (const player_id in players) {
+                const player = players[player_id];
+                player["town"] = setDefaultCardImages(player["town"]);
+            }
+            state.gameState.Players = players;
+        },
+        AddChatMessage(state, message) {
+            state.chatMessages.push(message.text);
+            if (state.chatMessages.length > 3) {
+                state.chatMessages.shift();
+            }
+        },
+        ClearChatMessages(state) {
+            state.chatMessages = [];
+        },
+        OpenCardChoice(state, cards) {
+            state.showCardChoice = true;
+            state.cardOptions = setDefaultCardImages(cards);
+        },
+        CloseCardChoice(state) {
+            state.showCardChoice = false;
+        },
+        SetCharacters(state, characters) {
+            state.gameState.Characters = setDefaultCardImages(characters, 'Unknown.png');
+        },
+        OpenCharacterChoice(state, characters) {
+            state.showCharacterChoice = true;
+            state.choosableCharacters = setDefaultCardImages(characters, 'Unknown.png');
+        },
+        CloseCharacterChoice(state) {
+            state.showCharacterChoice = false;
+        },
+        SetSelfCharacterAbilities(state, abilities) {
+            state.gameState.Player.Character.abilities = abilities;
+        },
+        OpenScoreboard(state, scoreboard) {
+            state.showScoreboard = true;
+            state.scoreboard = scoreboard;
+        },
+        CloseScoreboard(state) {
+            state.showScoreboard = false;
         }
     },
     actions: {
         SetMiscData({ commit }, data) {
-            commit("SetDeckSize", data.DeckSize);
-            commit("SetDeckActive", data.DeckActive);
-            commit("SetGameBankActive", data.GameBankActive);
-            commit("SetEndTurnActive", data.EndTurnActive);
+            commit("SetDeckSize", data.main_deck_size);
+            commit("SetDeckActive", data.main_deck_active);
+            commit("SetGameBankActive", data.global_bank_active);
+            commit("SetEndTurnActive", data.end_turn_active);
+            commit("SetCharacters", data.characters);
         },
         SetPlayer({ commit, dispatch }, player) {
-            commit("SetCoins", player.Coins);
-            commit("SetCrown", player.Crown);
-            dispatch("SetPlayerCharacter", player.Character);
+            commit("SetCoins", player.bank);
+            commit("SetCrown", player.crown);
+            dispatch("SetPlayerCharacter", player.characters[0]);
+            commit("SetCity", player.town);
+            commit("SetHand", player.hand);
         },
         SetPlayerCharacter({ commit }, character) {
+            if (character == null) {
+                character = {
+                    name: "???",
+                    description: "????????",
+                    image: "Unknown.png",
+                    type: null,
+                };
+            }
             commit("SetSelfCharacterName", character.name);
             commit("SetSelfCharacterDescription", character.description);
             commit("SetSelfCharacterImage", character.image);
-            commit("SetSelfCharacterType", character.type);
+            commit("SetSelfCharacterAbilities", character.abilities);
+            commit("SetSelfCharacterType", character.class);
         },
+        ClearEverything({ commit }) {
+            commit("SetPlayerName", "");
+            commit("SetRoomCode", "");
+            commit("SetIsHost", false);
+            commit("SetLobbyPlayerList", []);
+            commit("SetDeckSize", 0);
+            commit("SetDeckActive", false);
+            commit("SetGameBankActive", false);
+            commit("SetEndTurnActive", false);
+            commit("SetCoins", 0);
+            commit("SetCrown", false);
+            commit("SetSelfCharacterName", "???");
+            commit("SetSelfCharacterDescription", "??????????");
+            commit("SetSelfCharacterImage", "Unknown.png");
+            commit("SetSelfCharacterType", null);
+            commit("SetCity", []);
+            commit("SetHand", []);
+            commit("SetGamePlayerList", []);
+            commit("AddChatMessage", {text: "Welcome to the chat!"});
+            commit("CloseCardChoice");
+            commit("CloseCharacterChoice");
+            commit("SetCharacters", []);
+            commit("SetSelfCharacterAbilities", []);
+        }
     },
     namespaced: true
 }

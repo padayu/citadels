@@ -1,6 +1,6 @@
 <template>
   <end-turn-button class="end-turn">КОНЕЦ ХОДА</end-turn-button>
-  <exit-button class="exit">ВЫХОД</exit-button>
+  <exit-button class="exit" @click="ExitGame">ВЫХОД</exit-button>
   <div class="self-city">
     <self-city/>
   </div>
@@ -25,6 +25,7 @@
   <game-log class="game-log"></game-log>
   <card-choice-window v-if="showCardChoice"></card-choice-window>
   <character-choice-window v-if="showCharacterChoice"></character-choice-window>
+  <scoreboard-window v-if="showScoreboard"></scoreboard-window>
 </template>
 
 <script>
@@ -39,16 +40,19 @@ import Deck from "@/components/Deck.vue";
 import SelfCity from "@/components/SelfCity.vue";
 import GameBank from "@/components/GameBank.vue";
 import EnlargedCardView from "@/components/EnlargedCardView.vue";
-import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
+import {mapGetters, mapMutations, mapState} from "vuex";
 import GamePlayerList from "@/components/GamePlayerList.vue";
 import MiniCharacterBar from "@/components/MiniCharacterBar.vue";
 import CardChoiceWindow from "@/components/CardChoiceWindow.vue";
 import CharacterChoiceWindow from "@/components/CharacterChoiceWindow.vue";
 import GameLog from "@/components/GameLog.vue";
+import {Vue} from "vue-class-component";
+import ScoreboardWindow from "@/components/ScoreboardWindow.vue";
 
 export default {
   name: 'GameView',
   components: {
+    ScoreboardWindow,
     GameLog,
     CharacterChoiceWindow,
     CardChoiceWindow,
@@ -65,12 +69,25 @@ export default {
       },
     }
   },
+  methods: {
+    SendMessage(message) {
+      this.$store.dispatch('websocket/sendMessage', message)
+    },
+    ExitGame() {
+      Vue.router.push({name: 'home'});
+    },
+  },
+  unmounted() {
+    this.$store.dispatch('gameInfo/ClearEverything');
+  },
   computed: {
     ...mapState({
+      ws: state => state.websocket.ws,
       placeholder: state => state.enlargedCard.placeholder,
       enlargedCard: state => state.enlargedCard.enlargedCard,
       showCardChoice: state => state.gameInfo.showCardChoice,
       showCharacterChoice: state => state.gameInfo.showCharacterChoice,
+      showScoreboard: state => state.gameInfo.showScoreboard,
     }),
     ...mapGetters({
       getEnlargedCard: "enlargedCard/getEnlargedCard",

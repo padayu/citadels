@@ -1,5 +1,5 @@
 <template>
-  <img :class="{cardImage: true, hoveredOver: hover, active: this.is_active}" :src="require(`@/assets/card_images/${card.image}`)" alt="broken"
+  <img :class="{cardImage: true, hoveredOver: this.hover, active: this.card.active}" :src="require(`@/assets/card_images/${card.image}`)" alt="broken"
        @mouseover="cardHoveredOver" @mouseleave="cardHoverCancel" @click="Interact"/>
 </template>
 
@@ -14,10 +14,6 @@
         type: Object,
         required: true,
       },
-      is_active: {
-        type: Boolean,
-        required: true,
-      }
     },
     data() {
       return {
@@ -37,13 +33,23 @@
         this.$store.dispatch('websocket/sendMessage', message)
       },
       Interact() {
-        if (this.is_active) {
-          this.SendMessage("card_in_hand_interact, id= ", this.card.id);
+        if (this.card.active) {
+          this.cardHoverCancel();
+          this.SendMessage({
+            "type": "game_construct_building_ability",
+            "payload": {
+              "name": this.name,
+              "code": this.code,
+              "id": this.card.id,
+            }
+          });
         }
       }
     },
     computed: {
       ...mapState({
+        name: state => state.gameInfo.selfPlayerName,
+        code: state => state.gameInfo.roomCode,
         ws: state => state.websocket.ws,
       }),
     }
@@ -54,6 +60,7 @@
   .cardImage {
     width: 60px;
     height: 90px;
+    border-radius: 7px;
   }
   .hoveredOver {
     transform: translateY(-10px);

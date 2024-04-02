@@ -19,13 +19,23 @@ export default {
     },
     Interact() {
       if (this.is_active) {
-        this.SendMessage("deck_interact");
+        if (this.is_active) {
+          this.SendMessage({
+            "type": "game_activate_ability",
+            "payload": {
+              "code": this.code,
+              "name": this.name,
+              "ability_key": "base_draw_cards",}
+          })
+        }
       }
     }
   },
   computed: {
     ...mapState({
       ws: state => state.websocket.ws,
+      code: state => state.gameInfo.roomCode,
+      name: state => state.gameInfo.selfPlayerName,
       deck_size: state => state.gameInfo.gameState.DeckSize,
       is_active: state => state.gameInfo.gameState.DeckActive,
     }),

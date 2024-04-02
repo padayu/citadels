@@ -1,7 +1,7 @@
 <template>
   <div>
     <TransitionGroup name="Hand">
-      <CardInHand v-for="card in this.cards" :is_active="true" :card="card" :key="card.id" class="item"
+      <CardInHand v-for="card in this.cards" :card="card" :key="card.id" class="item"
                   :style="{ marginRight: `${calculateCardMargin(cards.length)}px` }"/>
     </TransitionGroup>
   </div>

@@ -3,7 +3,7 @@
     <div class="cityTitle">Ваш город:</div>
     <div>
       <TransitionGroup name="City">
-        <medium-card v-for="card in this.city" :active="true" :card="card" :key="card.id" class="item"
+        <medium-card v-for="card in this.city" :card="card" :key="card.id" class="item"
         @cardClicked="cardClickedMessage"/>
       </TransitionGroup>
     </div>
@@ -22,7 +22,6 @@ export default {
       this.$store.dispatch('websocket/sendMessage', message)
     },
     cardClickedMessage(cardId) {
-      this.SendMessage("self_city_card_clicked " + cardId);
     },
   },
   computed: {

@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import {mapMutations, mapState} from "vuex";
+import {mapMutations} from "vuex";
 
 export default {
   name: "DialogWindow",
@@ -84,5 +84,6 @@ export default {
   border-radius: 20px;
   font-size: 2em;
   font-family: "JetBrains Mono ExtraBold", monospace;
+  cursor: pointer;
 }
 </style>

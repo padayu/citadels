@@ -1,6 +1,7 @@
 <template>
-  <div class="log-container" :style="{height: `${GetHeight()}px`}" @mouseover="setHoverTrue" @mouseleave="setHoverFalse">
+  <div class="log-container" :style="{height: `${GetHeight()}px`}">
     <div v-for="message in messages" class="log-message"> {{ message}} </div>
+    <div class="hover_trigger" @mouseover="setHoverTrue" @mouseleave="setHoverFalse"></div>
   </div>
 </template>
 
@@ -31,7 +32,7 @@ export default {
   },
   computed: {
     ...mapState({
-      messages: state => state.gameInfo.messages,
+      messages: state => state.gameInfo.chatMessages,
     }),
   }
 }
@@ -54,8 +55,15 @@ export default {
   }
   .log-message {
     width: 90%;
-    height: 30px;
+    height: 40px;
     color: greenyellow;
     margin-bottom: 5px;
+    font-size: 0.7em;
+  }
+  .hover_trigger {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 10;
   }
 </style>

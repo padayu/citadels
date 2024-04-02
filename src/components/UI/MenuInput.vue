@@ -7,11 +7,16 @@ export default {
   name: "MenuInput",
   props: {
     modelValue: [String, Number],
-    placeholder: String
+    placeholder: String,
+    upper: Boolean,
   },
   methods: {
     updateInput(event) {
-      this.$emit('update:modelValue', event.target.value);
+      if (this.upper) {
+        this.$emit('update:modelValue', event.target.value.toUpperCase());
+      } else {
+        this.$emit('update:modelValue', event.target.value);
+      }
     }
   }
 }

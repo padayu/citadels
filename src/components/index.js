@@ -17,6 +17,7 @@ import miniCharacterDisplay from "@/components/MiniCharacterDisplay.vue";
 import cardChoiceWindow from "@/components/CardChoiceWindow.vue";
 import characterChoiceWindow from "@/components/CharacterChoiceWindow.vue";
 import gameLog from "@/components/GameLog.vue";
+import scoreboardWindow from "@/components/ScoreboardWindow.vue";
 
 
 
@@ -39,5 +40,6 @@ export default [
     miniCharacterDisplay,
     cardChoiceWindow,
     characterChoiceWindow,
-    gameLog
+    gameLog,
+    scoreboardWindow
 ]

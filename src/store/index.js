@@ -2,7 +2,7 @@ import { createStore } from 'vuex'
 import { enlargedCardModule } from '@/store/enlargedCardModule'
 import websocketModule from "@/store/websocketModule";
 import messageHandlerModule from "@/store/messageHandlerModule";
-import componentInfoModule from "@/store/componentInfoModule";
+import dialogModule from "@/store/dialogModule";
 import gameInfoModule from "@/store/gameInfoModule";
 
 export default createStore({
@@ -18,7 +18,7 @@ export default createStore({
     enlargedCard: enlargedCardModule,
     websocket: websocketModule,
     messageHandler: messageHandlerModule,
-    componentInfo: componentInfoModule,
+    dialog: dialogModule,
     gameInfo: gameInfoModule,
   }
 })

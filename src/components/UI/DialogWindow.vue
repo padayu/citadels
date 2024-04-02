@@ -21,10 +21,10 @@ export default {
   name: "DialogWindow",
   computed: {
     ...mapMutations({
-      ShowDialog: "componentInfo/ShowDialog",
-      HideDialog: "componentInfo/HideDialog",
-      SetDialogHeader: "componentInfo/SetDialogHeader",
-      SetDialogContent: "componentInfo/SetDialogContent",
+      ShowDialog: "dialog/ShowDialog",
+      HideDialog: "dialog/HideDialog",
+      SetDialogHeader: "dialog/SetDialogHeader",
+      SetDialogContent: "dialog/SetDialogContent",
     }),
   }
 }

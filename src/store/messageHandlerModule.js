@@ -72,10 +72,10 @@ export default {
             }
         },
         OpenDialog({ rootState, commit }, payload) {
-            commit("componentInfo/ShowDialog", null, { root: true });
-            commit("componentInfo/SetDialogHeader", payload.header, { root: true });
+            commit("dialog/ShowDialog", null, { root: true });
+            commit("dialog/SetDialogHeader", payload.header, { root: true });
             console.log(payload.content);
-            commit("componentInfo/SetDialogContent", payload.content, { root: true });
+            commit("dialog/SetDialogContent", payload.content, { root: true });
         }
     },
     namespaced: true

@@ -25,15 +25,15 @@ export default defineComponent({
   },
   computed: {
     ...mapState({
-      dialog_visible: state => state.componentInfo.dialog_visible,
-      dialog_header: state => state.componentInfo.dialog_header,
-      dialog_content: state => state.componentInfo.dialog_content,
+      dialog_visible: state => state.dialog.dialog_visible,
+      dialog_header: state => state.dialog.dialog_header,
+      dialog_content: state => state.dialog.dialog_content,
     }),
     ...mapMutations({
-      ShowDialog: "componentInfo/ShowDialog",
-      HideDialog: "componentInfo/HideDialog",
-      SetDialogHeader: "componentInfo/SetDialogHeader",
-      SetDialogContent: "componentInfo/SetDialogContent",
+      ShowDialog: "dialog/ShowDialog",
+      HideDialog: "dialog/HideDialog",
+      SetDialogHeader: "dialog/SetDialogHeader",
+      SetDialogContent: "dialog/SetDialogContent",
     }),
   }
 });

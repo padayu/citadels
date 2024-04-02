@@ -19,7 +19,6 @@ export default {
             }
             else if (message["type"] === "lobby_game_started") {
                 Vue.router.push({name: "game"});
-                commit("gameInfo/ClearChatMessages", null, { root: true });
             }
             else if (message["type"] === "lobby_created") {
                 commit("gameInfo/SetRoomCode", message.payload.code, { root: true });

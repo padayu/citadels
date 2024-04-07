@@ -4,7 +4,7 @@
     <div class="character-choice-window-header">
       <h2>Выберите персонажа</h2>
     </div>
-    <mini-character-bar class="characters"></mini-character-bar>
+    <mini-character-bar class="characters" @commitCharacterChoice="CharacterChosen"></mini-character-bar>
   </div>
   </div>
 </template>
@@ -17,9 +17,27 @@ import MiniCharacterBar from "@/components/MiniCharacterBar.vue";
 export default {
   name: "CharacterChoiceWindow",
   components: {MiniCharacterBar, MiniCharacterDisplay},
+  methods: {
+     SendMessage(message) {
+       this.$store.dispatch('websocket/sendMessage', message)
+     },
+      CharacterChosen(characterType) {
+        this.SendMessage({
+          type: "game_pick_character",
+          payload: {
+            "name": this.name,
+            "code": this.code,
+            "class": characterType,
+          }
+        });
+        this.$store.commit('gameInfo/CloseCharacterChoice')
+      }
+  },
   computed: {
     ...mapState({
-      characters: state => state.gameInfo.choosableCharacters,
+      name: state => state.gameInfo.selfPlayerName,
+      code: state => state.gameInfo.roomCode,
+      characters: state => state.gameInfo.gameState.Characters,
     }),
   }
 }

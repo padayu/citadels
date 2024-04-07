@@ -51,6 +51,7 @@ export default {
                 else {
                     commit("gameInfo/CloseCharacterChoice", null, { root: true });
                 }
+                commit("gameInfo/SetAbilityPending", message.payload.state.pending_ability, { root: true });
                 dispatch("gameInfo/SetMiscData", message.payload.state, { root: true });
                 dispatch("gameInfo/SetPlayer", message.payload.state.player, { root: true });
                 commit("gameInfo/SetGamePlayerList", message.payload.state.players, { root: true });

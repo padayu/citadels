@@ -35,14 +35,27 @@
       Interact() {
         if (this.card.active) {
           this.cardHoverCancel();
-          this.SendMessage({
-            "type": "game_construct_building_ability",
-            "payload": {
-              "name": this.name,
-              "code": this.code,
-              "id": this.card.id,
-            }
-          });
+          if (this.ability_pending) {
+            this.SendMessage({
+              "type": "game_target_ability",
+              "payload": {
+                "name": this.name,
+                "code": this.code,
+                "target_area": "card",
+                "target_value": this.card.id.toString(),
+              }
+            });
+          }
+          else {
+            this.SendMessage({
+              "type": "game_construct_building_ability",
+              "payload": {
+                "name": this.name,
+                "code": this.code,
+                "id": this.card.id,
+              }
+            });
+          }
         }
       }
     },
@@ -50,6 +63,7 @@
       ...mapState({
         name: state => state.gameInfo.selfPlayerName,
         code: state => state.gameInfo.roomCode,
+        ability_pending: state => state.gameInfo.gameState.AbilityPending,
         ws: state => state.websocket.ws,
       }),
     }

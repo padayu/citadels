@@ -25,13 +25,33 @@ export default {
       this.$store.dispatch('websocket/sendMessage', message)
     },
     Interact() {
-      if (this.is_active) {
-        this.SendMessage("mini_card_interact, id= ", this.card.id);
+      console.log("a");
+      if (this.card.active) {
+        console.log("b");
+        if (this.ability_pending) {
+          console.log("c");
+          this.SendMessage({
+            "type": "game_target_ability",
+            "payload": {
+              "name": this.name,
+              "code": this.code,
+              "target_area": "card",
+              "target_value": this.card.id.toString(),
+            }
+          });
+          this.$store.commit('enlargedCard/makeInvisible')
+        }
+        else {
+          this.SendMessage("mini_card_interact, id= ", this.card.id);
+        }
       }
     },
   },
   computed: {
     ...mapState({
+      name: state => state.gameInfo.selfPlayerName,
+      code: state => state.gameInfo.roomCode,
+      ability_pending: state => state.gameInfo.gameState.AbilityPending,
       ws: state => state.websocket.ws,
     }),
   }

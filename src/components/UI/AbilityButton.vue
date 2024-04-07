@@ -1,5 +1,5 @@
 <template>
-  <button :class="{abilityButton: true, active: this.is_active}" @click="ActivaleAbility">
+  <button :class="{abilityButton: true, active: this.ability.active}" @click="ActivaleAbility">
     <slot></slot>
   </button>
 </template>
@@ -20,14 +20,16 @@ export default {
       this.$store.dispatch('websocket/sendMessage', message)
     },
     ActivaleAbility() {
-      this.SendMessage({
-        type: "game_activate_ability",
-        payload: {
-          "name": this.name,
-          "code": this.code,
-          "ability_key": this.ability.key,
-        }
-      });
+      if (this.ability.active) {
+        this.SendMessage({
+          type: "game_activate_ability",
+          payload: {
+            "name": this.name,
+            "code": this.code,
+            "ability_key": this.ability.key,
+          }
+        });
+      }
     }
   },
   computed: {
@@ -53,6 +55,6 @@ export default {
     border-radius: 10px;
   }
   .active {
-    box-shadow: yellow 0 0 40px;
+    box-shadow: yellow 0 0 20px;
   }
 </style>

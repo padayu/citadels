@@ -12,20 +12,31 @@ import {mapState} from "vuex";
 export default {
   name: "mini-character-bar",
   components: {MiniCharacterDisplay},
+  props: {
+      targetable: Boolean,
+  },
   methods: {
     SendMessage(message) {
       this.$store.dispatch('websocket/sendMessage', message)
     },
     commitCharacterChoice(characterType) {
-      this.SendMessage({
-        type: "game_pick_character",
-        payload: {
-          "name": this.name,
-          "code": this.code,
-          "class": characterType,
+      if (this.targetable) {
+        console.log(this.ability_pending);
+        if (this.ability_pending) {
+          this.SendMessage({
+            "type": "game_target_ability",
+            "payload": {
+              "name": this.name,
+              "code": this.code,
+              "target_area": "character",
+              "target_value": characterType,
+            }
+          });
         }
-      });
-      this.$store.commit('gameInfo/CloseCharacterChoice')
+      }
+      else {
+        this.$emit('commitCharacterChoice', characterType);
+      }
     }
   },
   computed: {
@@ -33,6 +44,7 @@ export default {
       name: state => state.gameInfo.selfPlayerName,
       code: state => state.gameInfo.roomCode,
       characters: state => state.gameInfo.gameState.Characters,
+      ability_pending: state => state.gameInfo.gameState.AbilityPending,
     }),
   }
 }

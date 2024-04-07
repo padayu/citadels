@@ -16,6 +16,7 @@ export default {
             {"name": "ads", "score": 23},
             {"name": "ads", "score": 23}],
         gameState: {
+            AbilityPending: false,
             Players: [],
             Characters: [],
             Player: {
@@ -136,6 +137,9 @@ export default {
         },
         CloseScoreboard(state) {
             state.showScoreboard = false;
+        },
+        SetAbilityPending(state, value) {
+            state.gameState.AbilityPending = value;
         }
     },
     actions: {

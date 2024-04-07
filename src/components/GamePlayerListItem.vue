@@ -1,11 +1,13 @@
 <template>
   <div class="player">
-    <div class="playerName">{{ this.displayedPlayer.name }}</div>
+    <div :class="{playerName: true, active: this.displayedPlayer.active}" @click="NameClicked">
+      {{ this.displayedPlayer.name }}
+    </div>
     <div class="info">
-      <mini-character-display :character="{'card': this.defaultCharacter()}" :is_active="this.displayedPlayer.characters_active[0]"
+      <mini-character-display :character="{'card': this.defaultCharacter()}" :is_active="this.defaultCharacter().active"
                               class="miniCharacterDisplay" :has_crown="this.displayedPlayer.crown"/>
       <img class="miniCoinImage" src="@/assets/coin.png" alt="broken"/>
-      <div class="playerMoney">{{ this.displayedPlayer.coins }}</div>
+      <div class="playerMoney">{{ this.displayedPlayer.bank }}</div>
       <img class="miniCardImage" src="@/assets/cardback.png" alt="broken"/>
       <div class="playerHandSize">{{ this.displayedPlayer.hand_deck_size }}</div>
       <TransitionGroup name="City" class="container">
@@ -19,6 +21,7 @@
 import MiniCardInCity from "@/components/MiniCardInCity.vue";
 import MediumCard from "@/components/MediumCard.vue";
 import MiniCharacterDisplay from "@/components/MiniCharacterDisplay.vue";
+import {mapState} from "vuex";
 
 export default {
   name: "GamePlayerListItem",
@@ -30,6 +33,9 @@ export default {
     }
   },
   methods: {
+    SendMessage(message) {
+      this.$store.dispatch('websocket/sendMessage', message)
+    },
     defaultCharacter() {
       if (this.displayedPlayer.characters.length === 0) {
         return {
@@ -37,10 +43,32 @@ export default {
           ability_description: "Персонаж этого игрока пока не раскрыт!",
           image: "",
           is_robbed: false,
+          active: false,
         }
       }
       return this.displayedPlayer.characters[0];
+    },
+    NameClicked() {
+      if (this.displayedPlayer.active) {
+        this.SendMessage({
+          "type": "game_target_ability",
+          "payload": {
+            "name": this.name,
+            "code": this.code,
+            "target_area": "player",
+            "target_value": this.displayedPlayer.name,
+          }
+        });
+      }
     }
+  },
+  computed: {
+    ...mapState({
+      name: state => state.gameInfo.selfPlayerName,
+      code: state => state.gameInfo.roomCode,
+      characters: state => state.gameInfo.gameState.Characters,
+      ability_pending: state => state.gameInfo.gameState.AbilityPending,
+    }),
   }
 }
 </script>
@@ -54,13 +82,13 @@ export default {
   padding: 10px;
   background-color: rgba(20, 100, 200, 1);
   margin-bottom: 10px;
-
 }
 .playerName {
   font-size: 1.5em;
   color: yellow;
   text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
   margin-bottom: 10px;
+  cursor: pointer;
 }
 .info {
   display: flex;
@@ -101,5 +129,8 @@ export default {
 }
 .item {
   margin-right: 5px;
+}
+.active {
+  color: green;
 }
 </style>

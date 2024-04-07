@@ -45,8 +45,8 @@ export default {
     },
     Interact() {
       if (this.is_active) {
-        this.$emit("characterClicked", this.character.card.class);
-      }
+          this.$emit("characterClicked", this.character.card.class);
+        }
     },
     characterHoveredOver() {
       this.hover = true;
@@ -57,6 +57,9 @@ export default {
   },
   computed: {
     ...mapState({
+      name: state => state.gameInfo.selfPlayerName,
+      code: state => state.gameInfo.roomCode,
+      ability_pending: state => state.gameInfo.gameState.AbilityPending,
       ws: state => state.websocket.ws,
     }),
     defaultImage() {

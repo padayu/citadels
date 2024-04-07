@@ -21,7 +21,7 @@
   <deck class="deck"/>
   <enlarged-card-view class="enlarged-card" :card="getEnlargedCard" :show="getVisible"/>
   <game-player-list class="game-player-list"/>
-  <mini-character-bar class="mini-character-bar"></mini-character-bar>
+  <mini-character-bar class="mini-character-bar" :targetable="true"></mini-character-bar>
   <game-log class="game-log"></game-log>
   <card-choice-window v-if="showCardChoice"></card-choice-window>
   <character-choice-window v-if="showCharacterChoice"></character-choice-window>
